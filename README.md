@@ -138,24 +138,24 @@ git clone https://github.com/Muhammed-Nayeem/Automated-Testing-Of_Rest-Booking_A
     - **Response Body :**
     ```json
       {
-      "bookingid": 469,
-      "booking": {
-          "firstname": "Seth",
-          "lastname": "Howell",
-          "totalprice": 125,
+        "bookingid": 804,
+        "booking": {
+          "firstname": "Kennedy",
+          "lastname": "Wolf",
+          "totalprice": 798,
           "depositpaid": false,
           "bookingdates": {
-              "checkin": "2024-03-25",
-              "checkout": "2024-03-29"
+              "checkin": "2024-03-26",
+              "checkout": "2024-03-30"
           },
-          "additionalneeds": "Refined Steel Hat"
+          "additionalneeds": "Licensed Soft Hat"
         }
       }
     ```  
 
 2. **Read After Create Booking :**
     
-    - `Request URL :` https://restful-booker.herokuapp.com/booking/bookingid/
+    - `Request URL :` https://restful-booker.herokuapp.com/booking/{{bookingid}}
     - `Request Method :` <span style="color: green; font-weight: bold;">GET</span>
     - `Pre-request Script :` N/A
     - `Request Body :` N/A
@@ -216,15 +216,15 @@ git clone https://github.com/Muhammed-Nayeem/Automated-Testing-Of_Rest-Booking_A
     - **Response Body :**
     ```json
       {
-        "firstname": "Kristina",
-        "lastname": "Powlowski",
-        "totalprice": 719,
-        "depositpaid": true,
+        "firstname": "Kennedy",
+        "lastname": "Wolf",
+        "totalprice": 798,
+        "depositpaid": false,
         "bookingdates": {
-            "checkin": "2024-03-25",
-            "checkout": "2024-03-29"
+            "checkin": "2024-03-26",
+            "checkout": "2024-03-30"
         },
-        "additionalneeds": "Generic Metal Bacon"
+        "additionalneeds": "Licensed Soft Hat"
       }
     ```
 3. **Create Access Token :**
@@ -259,12 +259,12 @@ git clone https://github.com/Muhammed-Nayeem/Automated-Testing-Of_Rest-Booking_A
     - **Response Body :**
     ```json
       {
-        "token": "fa3318c90bbe560"
+        "token": "0ac1c17ed76846b"
       }
     ```
 4. **Update A Booking :**
 
-    - `Request URL :` https://restful-booker.herokuapp.com/booking/bookingid/
+    - `Request URL :` https://restful-booker.herokuapp.com/booking/{{bookingid}}
     - `Request Method :` <span style="color: skyblue; font-weight: bold;">PUT</span>
     - **Pre-request Script :**
     ```js
@@ -292,7 +292,7 @@ git clone https://github.com/Muhammed-Nayeem/Automated-Testing-Of_Rest-Booking_A
     ```
     - **Request Body :**
     ```json
-      -H Key: Cookie Value: token=fa3318c90bbe560
+      -H Key: Cookie, Value: token=0ac1c17ed76846b
       {
         "firstname": "{{updatedFirstName}}",
         "lastname": "{{updatedLastName}}",
@@ -333,20 +333,20 @@ git clone https://github.com/Muhammed-Nayeem/Automated-Testing-Of_Rest-Booking_A
     - **Response Body :**
     ```json
       {
-        "firstname": "Jules",
-        "lastname": "Nitzsche",
-        "totalprice": 769,
+        "firstname": "Nicolas",
+        "lastname": "Bode",
+        "totalprice": 238,
         "depositpaid": false,
         "bookingdates": {
-            "checkin": "2024-03-24",
-            "checkout": "2024-03-28"
+            "checkin": "2024-03-25",
+            "checkout": "2024-03-29"
         },
-        "additionalneeds": "Unbranded Soft Gloves"
+        "additionalneeds": "Tasty Frozen Computer"
       }
     ```
 5. **Read After Update A Booking :**
 
-    - `Request URL :` https://restful-booker.herokuapp.com/booking/bookingid/
+    - `Request URL :` https://restful-booker.herokuapp.com/booking/{{bookingid}}
     - `Request Method :` <span style="color: green; font-weight: bold;">GET</span>
     - `Pre-request Script :` N/A
     - `Request Body :` N/A
@@ -367,7 +367,7 @@ git clone https://github.com/Muhammed-Nayeem/Automated-Testing-Of_Rest-Booking_A
               pm.expect(pm.environment.get("updatedFirstName")).to.eql(responseData.firstname);
           });
 
-          pm.test("Checking if the Updated Lasst Name as provided.", function() {
+          pm.test("Checking if the Updated Last Name as provided.", function() {
               pm.expect(pm.environment.get("updatedLastName")).to.eql(responseData.lastname);
           });
 
@@ -407,20 +407,20 @@ git clone https://github.com/Muhammed-Nayeem/Automated-Testing-Of_Rest-Booking_A
     - **Response Body :**
     ```json
       {
-        "firstname": "Ericka",
-        "lastname": "Homenick",
-        "totalprice": 10,
+        "firstname": "Nicolas",
+        "lastname": "Bode",
+        "totalprice": 238,
         "depositpaid": false,
         "bookingdates": {
-            "checkin": "2024-03-24",
-            "checkout": "2024-03-28"
+            "checkin": "2024-03-25",
+            "checkout": "2024-03-29"
         },
-        "additionalneeds": "Generic Rubber Chicken"
+        "additionalneeds": "Tasty Frozen Computer"
       }
     ```
 6. **Partially Update A Booking :**
 
-    - `Request URL :` https://restful-booker.herokuapp.com/booking/bookingid
+    - `Request URL :` https://restful-booker.herokuapp.com/booking/{{bookingid}}
     - `Request Method :` <span style="color: purple; font-weight: bold;">PATCH</span>
     - **Pre-request Script :**
     ```js
@@ -434,10 +434,10 @@ git clone https://github.com/Muhammed-Nayeem/Automated-Testing-Of_Rest-Booking_A
     ```
     - **Request Body :**
     ```json
-      -H, Key: Cookie, Value:token=fa3318c90bbe560
+      -H Key: Cookie, Value: token=0ac1c17ed76846b
       {
-      "totalprice": {{partialUpdatedTotalPrice}},
-      "depositpaid": {{partialUpdatedDepositPaid}}
+        "totalprice": {{partialUpdatedTotalPrice}},
+        "depositpaid": {{partialUpdatedDepositPaid}}
       }
     ```
     - **Tests :**
@@ -466,15 +466,15 @@ git clone https://github.com/Muhammed-Nayeem/Automated-Testing-Of_Rest-Booking_A
     - **Response Body :**
     ```json
       {
-        "firstname": "Bo",
-        "lastname": "Berge",
-        "totalprice": 51,
+        "firstname": "Nicolas",
+        "lastname": "Bode",
+        "totalprice": 232,
         "depositpaid": false,
         "bookingdates": {
             "checkin": "2024-03-25",
             "checkout": "2024-03-29"
         },
-        "additionalneeds": "Tasty Fresh Fish"
+        "additionalneeds": "Tasty Frozen Computer"
       }
     ```
 7. **Read After Partially Update A Booking :**
@@ -520,24 +520,20 @@ git clone https://github.com/Muhammed-Nayeem/Automated-Testing-Of_Rest-Booking_A
     - **Response Body :**
     ```json
       {
-        "firstname": "Margret",
-        "lastname": "Hoppe",
-        "totalprice": 978,
+        "firstname": "Nicolas",
+        "lastname": "Bode",
+        "totalprice": 232,
         "depositpaid": false,
         "bookingdates": {
-            "checkin": "2024-03-26",
-            "checkout": "2024-03-30"
+            "checkin": "2024-03-25",
+            "checkout": "2024-03-29"
         },
-        "additionalneeds": "Ergonomic Frozen Bike"
+        "additionalneeds": "Tasty Frozen Computer"
       }
-    ```
-    - **Response Body :**
-    ```json
-      Created/Deleted
     ```
 8. **Delete A Booking :**
 
-    - `Request URL :` https://restful-booker.herokuapp.com/booking/bookingid/
+    - `Request URL :` https://restful-booker.herokuapp.com/booking/{{bookingid}}
     - `Request Method :` <span style="color: crimson; font-weight: bold;">DELETE</span>
     - `Pre-request Script :` N/A
     - `Request Body :` N/A
@@ -562,9 +558,13 @@ git clone https://github.com/Muhammed-Nayeem/Automated-Testing-Of_Rest-Booking_A
           pm.test("Doesn't created Access Token Successfully!");
       }
     ```
+    - **Response Body :**
+    ```json
+      Created -> Postman Problem
+    ```
 9. **Read After Deleted Booking :**
 
-    - `Request URL :`
+    - `Request URL :` https://restful-booker.herokuapp.com/booking/{{bookingid}}
     - `Request Method :` <span style="color: green; font-weight: bold;">GET</span>
     - `Pre-request Script :` N/A
     - `Request Body :` N/A
