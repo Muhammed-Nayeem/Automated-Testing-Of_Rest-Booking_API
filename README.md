@@ -344,3 +344,77 @@ git clone https://github.com/Muhammed-Nayeem/Automated-Testing-Of_Rest-Booking_A
         "additionalneeds": "Unbranded Soft Gloves"
       }
     ```
+5. **Read After Update A Booking :**
+
+    - `Request URL :` https://restful-booker.herokuapp.com/booking/bookingid/
+    - `Request Method :` <span style="color: green; font-weight: bold;">GET</span>
+    - `Pre-request Script :` N/A
+    - `Request Body :` N/A
+    - **Tests :**
+    ```js
+      /**
+      * Title: Test Script For Updated Data Cross Validation;
+      */
+
+      let responseStatusCode = pm.response.code;
+
+      switch(responseStatusCode) {
+        case 200:
+          let responseData = pm.response.json();
+          pm.test(`Checking if the Get Booking Data is updated of id's-${pm.environment.get("bookingId")} after update!`);
+
+          pm.test("Checking if the Updated First Name as provided.", function() {
+              pm.expect(pm.environment.get("updatedFirstName")).to.eql(responseData.firstname);
+          });
+
+          pm.test("Checking if the Updated Lasst Name as provided.", function() {
+              pm.expect(pm.environment.get("updatedLastName")).to.eql(responseData.lastname);
+          });
+
+          pm.test("Checking if the Updated Total Price as provided.", function() {
+              pm.expect(pm.environment.get("updatedTotalPrice")).to.eql(responseData.totalprice);
+          });
+
+          pm.test("Checking if the Updated Deposit Paid as provided.", function() {
+              pm.expect(pm.environment.get("updatedDepositPaid")).to.eql(responseData.depositpaid.toString());
+          });
+
+          pm.test("Checking if the Updated Checkin Date as provided.", function() {
+              pm.expect(pm.environment.get("updatedCheckIn")).to.eql(responseData.bookingdates.checkin);
+          });
+
+          pm.test("Checking if the Updated Checkout Date as provided.", function() {
+              pm.expect(pm.environment.get("updatedCheckOut")).to.eql(responseData.bookingdates.checkout);
+          });
+
+          pm.test("Checking if the Updated AdditionalNeeds as provided.", function() {
+              pm.expect(pm.environment.get("updatedAdditionalNeeds")).to.eql(responseData.additionalneeds);
+          });
+          break;
+
+        case 500:
+          pm.test(`Server Error of id-${pm.environment.get("bookingId")}'s record!`);
+          break;
+
+        case 404:
+          pm.test(`Not Found Any Record of id-${pm.environment.get("bookingId")}`);
+          break;
+
+        default:
+          pm.test(`Geting Trouble To Fetch Data of id-${pm.environment.get("bookingId")}`);
+      }
+    ```
+    - **Response Body :**
+    ```json
+      {
+        "firstname": "Ericka",
+        "lastname": "Homenick",
+        "totalprice": 10,
+        "depositpaid": false,
+        "bookingdates": {
+            "checkin": "2024-03-24",
+            "checkout": "2024-03-28"
+        },
+        "additionalneeds": "Generic Rubber Chicken"
+      }
+    ```
