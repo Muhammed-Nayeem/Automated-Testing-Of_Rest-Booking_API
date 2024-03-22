@@ -418,3 +418,62 @@ git clone https://github.com/Muhammed-Nayeem/Automated-Testing-Of_Rest-Booking_A
         "additionalneeds": "Generic Rubber Chicken"
       }
     ```
+6. **Partially Update A Booking :**
+
+    - `Request URL :` https://restful-booker.herokuapp.com/booking/bookingid
+    - `Request Method :` <span style="color: purple; font-weight: bold;">PATCH</span>
+    - **Pre-request Script :**
+    ```js
+      //Predefined Data Set:
+      let partialUpdatedTotalPrice = pm.variables.replaceIn("{{$randomPrice}}");
+      let partialUpdatedDepositPaid = pm.variables.replaceIn("{{$randomBoolean}}");
+
+      //Store Variables in Environment:
+      pm.environment.set("partialUpdatedTotalPrice", parseInt(partialUpdatedTotalPrice));
+      pm.environment.set("partialUpdatedDepositPaid", partialUpdatedDepositPaid);
+    ```
+    - **Request Body :**
+    ```json
+      -H, Key: Cookie, Value:token=fa3318c90bbe560
+      {
+      "totalprice": {{partialUpdatedTotalPrice}},
+      "depositpaid": {{partialUpdatedDepositPaid}}
+      }
+    ```
+    - **Tests :**
+    ```js
+      //Get the response code:
+      let responseStatusCode = pm.response.code;
+
+      //if response code is 200, then do certain task:
+      switch(responseStatusCode) {
+        case 200:
+          pm.test(`Veryfying that Booking Data is Partially update of id's-${pm.environment.get("bookingId")}`);
+          break;
+
+        case 403:
+          pm.test(`Dosen't Partially Modified to Details of Booking ID- ${pm.environment.get("bookingId")}`);
+          break;
+
+        case 405:
+          pm.test(`There's No Details of Booking ID- ${pm.environment.get("bookingId")} - Create First`);
+          break;
+
+        default:
+          pm.test("Not Allowed to Update/Delete!");
+      }
+    ```
+    - **Response Body :**
+    ```json
+      {
+        "firstname": "Bo",
+        "lastname": "Berge",
+        "totalprice": 51,
+        "depositpaid": false,
+        "bookingdates": {
+            "checkin": "2024-03-25",
+            "checkout": "2024-03-29"
+        },
+        "additionalneeds": "Tasty Fresh Fish"
+      }
+    ```
