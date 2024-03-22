@@ -531,6 +531,10 @@ git clone https://github.com/Muhammed-Nayeem/Automated-Testing-Of_Rest-Booking_A
         "additionalneeds": "Ergonomic Frozen Bike"
       }
     ```
+    - **Response Body :**
+    ```json
+      Created/Deleted
+    ```
 8. **Delete A Booking :**
 
     - `Request URL :` https://restful-booker.herokuapp.com/booking/bookingid/
@@ -557,4 +561,33 @@ git clone https://github.com/Muhammed-Nayeem/Automated-Testing-Of_Rest-Booking_A
         default:
           pm.test("Doesn't created Access Token Successfully!");
       }
+    ```
+9. **Read After Deleted Booking :**
+
+    - `Request URL :`
+    - `Request Method :` <span style="color: green; font-weight: bold;">GET</span>
+    - `Pre-request Script :` N/A
+    - `Request Body :` N/A
+    - **Tests :**
+    ```js
+      //Response  Code:
+      let responseStatusCode = pm.response.code;
+
+      //if response code is 200, then do the certain task:
+      switch(responseStatusCode) {
+        case 500:
+          pm.test(`Server Error of id-${pm.environment.get("bookingId")}'s record!`);
+          break;
+
+        case 404:
+          pm.test(`Not Found Any Record of id-${pm.environment.get("bookingId")}. Deleted Successfully!`);
+          break;
+
+        default:
+          pm.test(`Trouble to Fetch Data of id-${pm.environment.get("bookingId")}`);
+      }
+    ```
+    - **Response Body :**
+    ```json
+      Not Found
     ```
