@@ -262,3 +262,85 @@ git clone https://github.com/Muhammed-Nayeem/Automated-Testing-Of_Rest-Booking_A
         "token": "fa3318c90bbe560"
       }
     ```
+4. **Update A Booking :**
+
+    - `Request URL :` https://restful-booker.herokuapp.com/booking/bookingid/
+    - `Request Method :` <span style="color: skyblue; font-weight: bold;">PUT</span>
+    - **Pre-request Script :**
+    ```js
+      //Predefined Data Set:
+      let updatedFirstName = pm.variables.replaceIn("{{$randomFirstName}}");
+      let updatedLastName = pm.variables.replaceIn("{{$randomLastName}}");
+      let updatedTotalPrice = pm.variables.replaceIn("{{$randomPrice}}");
+      let updatedDepositPaid = pm.variables.replaceIn("{{$randomBoolean}}");
+      let updatedAdditionalNeeds = pm.variables.replaceIn("{{$randomProductName}}");
+
+      //Date:
+      const date = require("moment");
+      const today = date();
+      let updatedCheckIn = today.add(2, "d").format("YYYY-MM-DD");
+      let updatedCheckOut = today.add(4, "d").format("YYYY-MM-DD");
+
+      //Store Variables in Environment:
+      pm.environment.set("updatedFirstName", updatedFirstName);
+      pm.environment.set("updatedLastName", updatedLastName);
+      pm.environment.set("updatedTotalPrice", parseInt(updatedTotalPrice));
+      pm.environment.set("updatedDepositPaid", updatedDepositPaid);
+      pm.environment.set("updatedCheckIn", updatedCheckIn);
+      pm.environment.set("updatedCheckOut", updatedCheckOut);
+      pm.environment.set("updatedAdditionalNeeds", updatedAdditionalNeeds);
+    ```
+    - **Request Body :**
+    ```json
+      -H Key: Cookie Value: token=fa3318c90bbe560
+      {
+        "firstname": "{{updatedFirstName}}",
+        "lastname": "{{updatedLastName}}",
+        "totalprice": {{updatedTotalPrice}},
+        "depositpaid": {{updatedDepositPaid}},
+        "bookingdates": {
+            "checkin": "{{updatedCheckIn}}",
+            "checkout": "{{updatedCheckOut}}"
+        },
+        "additionalneeds": "{{updatedAdditionalNeeds}}"
+      }
+    ```
+    - **Tests :**
+    ```js
+      /**
+      * Title: Test Script For Data Update Validation;
+      */
+
+      let responseStatusCode = pm.response.code;
+
+      switch(responseStatusCode) {
+        case 200:
+            pm.test(`Veryfying that Booking Data is update of id's-${pm.environment.get("bookingId")}!`);
+            break;
+
+        case 403:
+            pm.test(`Dosen't modified to Details of Booking ID- ${pm.environment.get("bookingId")}`);
+            break;
+
+        case 405:
+            pm.test(`There's No Details of Booking ID- ${pm.environment.get("bookingId")} - Create First`);
+            break;
+
+        default:
+            pm.test("Not Allowed to Update/Delete!");
+      }
+    ```
+    - **Response Body :**
+    ```json
+      {
+        "firstname": "Jules",
+        "lastname": "Nitzsche",
+        "totalprice": 769,
+        "depositpaid": false,
+        "bookingdates": {
+            "checkin": "2024-03-24",
+            "checkout": "2024-03-28"
+        },
+        "additionalneeds": "Unbranded Soft Gloves"
+      }
+    ```
