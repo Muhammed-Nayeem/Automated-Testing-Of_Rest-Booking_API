@@ -2,35 +2,35 @@
 
 The purpose of this project is to use Postman and Newman to automate the testing of a REST booking API. I enable consistent and dependable validation of the API endpoints by automating the testing process, which minimizes manual labor and allows for quicker feedback on modifications.
 
-### Features :
----
+### Features
+----
 - Tested the diverse <span style="color: black; font-weight: bold;">HTTP</span> methods including <span style="color: green; font-weight: bold;">GET</span>, <span style="color: yellow; font-weight: bold;">POST</span>, <span style="color: skyblue; font-weight: bold;">PUT</span>, <span style="color: purple; font-weight: bold;">PATCH</span>, and <span style="color: crimson; font-weight: bold;">DELETE</span>.
 - Collection of tests covering with different API endpoints.
 - Environment setup for easy switching between environments.
 - Pre-request scripts for data setup.
 - Test scripts for assertions and validations.
 
-### API Documentation :
----
+### API Documentation
+----
 - `Documentation Link :` [API Documentation - Click here to open documentation](https://documenter.getpostman.com/view/29174005/2sA35A95nd)
 
-### Tools and Technologies :
----
-- `Postman`
-- `Newman`
-- `JavaScript`
-- `JSON`
+### Tools and Technologies
+----
+- Postman
+- Newman
+- JavaScript
+- JSON
 
-### Prerequisite :
----
-- `Node.Js`
-- `Newman`
-- `Newman HTML Reporter Library`
+### Prerequisite
+----
+- Node.Js
+- Newman
+- Newman HTML Reporter Library
 
-### Installation :
----
+### Installation
+----
 1. `Node.Js :` [Download and Install Node.js on your machine from here](https://nodejs.org/en/download)
-2 `Postman :` [Download and Install Postman on your machine from here](https://www.postman.com/downloads/)
+2. `Postman :` [Download and Install Postman on your machine from here](https://www.postman.com/downloads/)
 3. `Clone This Repository :` 
 ```console
 git clone https://github.com/Muhammed-Nayeem/Automated-Testing-Of_Rest-Booking_API.git
@@ -57,8 +57,8 @@ git clone https://github.com/Muhammed-Nayeem/Automated-Testing-Of_Rest-Booking_A
     npm install -g newman-reporter-htmlextra
     ```
 
-### Usage :
----
+### Usage
+----
 - `Select Environment :`
 
     - In Postman, select the appropriate environment (e.g., Development, Production) from the top-right dropdown.
@@ -75,8 +75,8 @@ git clone https://github.com/Muhammed-Nayeem/Automated-Testing-Of_Rest-Booking_A
     - Once the tests are complete, view the results in the Runner tab.
     - Detailed test results can be viewed for each request.
 
-### Testing and Test Case Scenarios :
----
+### Testing and Test Case Scenarios
+----
 1. **Create Booking**   
     - `Request URL :` https://restful-booker.herokuapp.com/booking/
     - `Request Method :` <span style="color: yellow; font-weight: bold;">POST</span>
