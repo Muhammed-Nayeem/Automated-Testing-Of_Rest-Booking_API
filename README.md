@@ -151,4 +151,79 @@ git clone https://github.com/Muhammed-Nayeem/Automated-Testing-Of_Rest-Booking_A
           "additionalneeds": "Refined Steel Hat"
         }
       }
+    ```  
+
+2. **Read After Create Booking :**
+    
+    - `Request URL :` https://restful-booker.herokuapp.com/booking/bookingid/
+    - `Request Method :` <span style="color: green; font-weight: bold;">GET</span>
+    - `Pre-request Script :` N/A
+    - `Request Body :` N/A
+    - **Tests :**
+    ```js
+      /**
+      * Title: Test Script For Data Cross Validation;
+      */
+
+      let responseStatusCode = pm.response.code;
+
+      switch(responseStatusCode) {
+        case 200:
+          let responseData = pm.response.json();
+          pm.test(`Checking Get Booking Data of id-${pm.environment.get("bookingId")}'s Ok!`);
+
+          pm.test("Checking if the First Name is inserted as the given input", function() {
+              pm.expect(pm.environment.get("firstName")).to.eql(responseData.firstname);
+          });
+
+          pm.test("Checking if the Last Name is inserted as the given input", function() {
+              pm.expect(pm.environment.get("lastName")).to.eql(responseData.lastname);
+          });
+
+          pm.test("Checking if the Total Price is inserted as the given input", function() {
+              pm.expect(pm.environment.get("totalPrice")).to.eql(responseData.totalprice);
+          });
+
+          pm.test("Checking if the Deposit Paid is inserted as the given input", function() {
+              pm.expect(pm.environment.get("depositPaid")).to.eql(responseData.depositpaid.toString());
+          });
+
+          pm.test("Checking if the Checkin Date is inserted as the given input", function() {
+              pm.expect(pm.environment.get("checkIn")).to.eql(responseData.bookingdates.checkin);
+          });
+
+          pm.test("Checking if the Checkout Date is inserted as the given input", function() {
+              pm.expect(pm.environment.get("checkOut")).to.eql(responseData.bookingdates.checkout);
+          });
+
+          pm.test("Checking if the AdditionalNeeds is inserted as the given input", function() {
+              pm.expect(pm.environment.get("additionalNeeds")).to.eql(responseData.additionalneeds);
+          });
+          break;
+
+        case 500:
+          pm.test(`Server Error of id-${pm.environment.get("bookingId")}'s record!`);
+          break;
+
+        case 404:
+          pm.test(`Not Found Any Record of id-${pm.environment.get("bookingId")}`);
+          break;
+
+        default:
+          pm.test(`Geting Trouble To Fetch Data of id-${pm.environment.get("bookingId")}`);
+      }
+    ```
+    - **Response Body :**
+    ```json
+      {
+        "firstname": "Kristina",
+        "lastname": "Powlowski",
+        "totalprice": 719,
+        "depositpaid": true,
+        "bookingdates": {
+            "checkin": "2024-03-25",
+            "checkout": "2024-03-29"
+        },
+        "additionalneeds": "Generic Metal Bacon"
+      }
     ```
