@@ -227,3 +227,38 @@ git clone https://github.com/Muhammed-Nayeem/Automated-Testing-Of_Rest-Booking_A
         "additionalneeds": "Generic Metal Bacon"
       }
     ```
+3. **Create Access Token :**
+
+    - `Request URL :` https://restful-booker.herokuapp.com/auth
+    - `Request Method :` <span style="color: yellow; font-weight: bold;">POST</span>
+    - `Pre-request Script :` N/A
+    - **Request Body :**
+    ```json
+      {
+      "username": "admin",
+      "password": "password123"
+      }
+    ```
+    - **Tests :**
+    ```js
+      //Get the response code:
+      let responseStatusCode = pm.response.code;
+
+      //If the response code is 200, then do the certain task:
+      switch(responseStatusCode) {
+        case 200:
+            let responseData = pm.response.json();
+            pm.environment.set("accessToken", responseData.token);
+            pm.test("Checking if the Access Token is creating.");
+            break;
+
+        default:
+            pm.test("Doesn't created Access Token Successfully!");
+      }
+    ```
+    - **Response Body :**
+    ```json
+      {
+        "token": "fa3318c90bbe560"
+      }
+    ```
