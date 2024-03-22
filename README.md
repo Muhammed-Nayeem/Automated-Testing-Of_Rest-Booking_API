@@ -531,3 +531,30 @@ git clone https://github.com/Muhammed-Nayeem/Automated-Testing-Of_Rest-Booking_A
         "additionalneeds": "Ergonomic Frozen Bike"
       }
     ```
+8. **Delete A Booking :**
+
+    - `Request URL :` https://restful-booker.herokuapp.com/booking/bookingid/
+    - `Request Method :` <span style="color: crimson; font-weight: bold;">DELETE</span>
+    - `Pre-request Script :` N/A
+    - `Request Body :` N/A
+    - **Header :**
+    ```
+      key: Cookie Value: token=d1702d49fdaf5e9
+    ```
+    - **Tests :**
+    ```js
+      //Get the response code:
+      let responseStatusCode = pm.response.code;
+
+      //If the response code is 200, then do the certain task:
+      switch(responseStatusCode) {
+        case 200:
+          let responseData = pm.response.json();
+          pm.environment.set("accessToken", responseData.token);
+          pm.test("Checking if the Access Token is creating.");
+          break;
+
+        default:
+          pm.test("Doesn't created Access Token Successfully!");
+      }
+    ```
