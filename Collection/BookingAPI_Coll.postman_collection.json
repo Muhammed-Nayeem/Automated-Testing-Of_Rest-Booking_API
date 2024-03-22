@@ -1,0 +1,658 @@
+{
+	"info": {
+		"_postman_id": "c339ab05-b3e5-40d5-98dc-eea0391c4f71",
+		"name": "BookingAPI_Coll",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "29174005"
+	},
+	"item": [
+		{
+			"name": "Create Booking",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"//Get the response code:\r",
+							"let responseStatusCode = pm.response.code;\r",
+							"\r",
+							"//If the response code is 200, then do the certian task:\r",
+							"switch(responseStatusCode) {\r",
+							"    case 200:\r",
+							"        let responseData = pm.response.json();\r",
+							"        pm.environment.set(\"bookingId\", responseData.bookingid);\r",
+							"        pm.test(`Veryfying that Booking Creation is successfull of id-${pm.environment.get(\"bookingId\")}`);\r",
+							"        break;\r",
+							"    \r",
+							"    default:\r",
+							"        pm.test(`Booking Dosen't Created Successfully!`);\r",
+							"}\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"//Prepared Predefined random Data Set:\r",
+							"let firstName = pm.variables.replaceIn(\"{{$randomFirstName}}\");\r",
+							"let lastName = pm.variables.replaceIn(\"{{$randomLastName}}\");\r",
+							"let totalPrice = pm.variables.replaceIn(\"{{$randomPrice}}\");\r",
+							"let depositPaid = pm.variables.replaceIn(\"{{$randomBoolean}}\");\r",
+							"let additionalNeeds = pm.variables.replaceIn(\"{{$randomProductName}}\");\r",
+							"\r",
+							"//Date:\r",
+							"const date = require(\"moment\");\r",
+							"const today = date();\r",
+							"let checkIn = today.add(3, \"d\").format(\"YYYY-MM-DD\");\r",
+							"let checkOut = today.add(4, \"d\").format(\"YYYY-MM-DD\");\r",
+							"\r",
+							"//Store Variables in Environment:\r",
+							"pm.environment.set(\"firstName\", firstName);\r",
+							"pm.environment.set(\"lastName\", lastName);\r",
+							"pm.environment.set(\"totalPrice\", parseInt(totalPrice));\r",
+							"pm.environment.set(\"depositPaid\", depositPaid);\r",
+							"pm.environment.set(\"checkIn\", checkIn);\r",
+							"pm.environment.set(\"checkOut\", checkOut);\r",
+							"pm.environment.set(\"additionalNeeds\", additionalNeeds);\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"firstname\": \"{{firstName}}\",\r\n    \"lastname\": \"{{lastName}}\",\r\n    \"totalprice\": {{totalPrice}},\r\n    \"depositpaid\": {{depositPaid}},\r\n    \"bookingdates\": {\r\n        \"checkin\": \"{{checkIn}}\",\r\n        \"checkout\": \"{{checkOut}}\"\r\n    },\r\n    \"additionalneeds\": \"{{additionalNeeds}}\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{base_url}}/booking/",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"booking",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Booking",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"/**\r",
+							" * Title: Test Script For Data Cross Validation;\r",
+							" */\r",
+							"\r",
+							"let responseStatusCode = pm.response.code;\r",
+							"\r",
+							"switch(responseStatusCode) {\r",
+							"    case 200:\r",
+							"        let responseData = pm.response.json();\r",
+							"        pm.test(`Checking Get Booking Data of id-${pm.environment.get(\"bookingId\")}'s Ok!`);\r",
+							"\r",
+							"        pm.test(\"Checking if the First Name is inserted as the given input\", function() {\r",
+							"            pm.expect(pm.environment.get(\"firstName\")).to.eql(responseData.firstname);\r",
+							"        });\r",
+							"\r",
+							"        pm.test(\"Checking if the Last Name is inserted as the given input\", function() {\r",
+							"            pm.expect(pm.environment.get(\"lastName\")).to.eql(responseData.lastname);\r",
+							"        });\r",
+							"\r",
+							"        pm.test(\"Checking if the Total Price is inserted as the given input\", function() {\r",
+							"            pm.expect(pm.environment.get(\"totalPrice\")).to.eql(responseData.totalprice);\r",
+							"        });\r",
+							"\r",
+							"        pm.test(\"Checking if the Deposit Paid is inserted as the given input\", function() {\r",
+							"            pm.expect(pm.environment.get(\"depositPaid\")).to.eql(responseData.depositpaid.toString());\r",
+							"        });\r",
+							"\r",
+							"        pm.test(\"Checking if the Checkin Date is inserted as the given input\", function() {\r",
+							"            pm.expect(pm.environment.get(\"checkIn\")).to.eql(responseData.bookingdates.checkin);\r",
+							"        });\r",
+							"\r",
+							"        pm.test(\"Checking if the Checkout Date is inserted as the given input\", function() {\r",
+							"            pm.expect(pm.environment.get(\"checkOut\")).to.eql(responseData.bookingdates.checkout);\r",
+							"        });\r",
+							"\r",
+							"        pm.test(\"Checking if the AdditionalNeeds is inserted as the given input\", function() {\r",
+							"            pm.expect(pm.environment.get(\"additionalNeeds\")).to.eql(responseData.additionalneeds);\r",
+							"        });\r",
+							"        break;\r",
+							"\r",
+							"    case 500:\r",
+							"        pm.test(`Server Error of id-${pm.environment.get(\"bookingId\")}'s record!`);\r",
+							"        break;\r",
+							"\r",
+							"    case 404:\r",
+							"        pm.test(`Not Found Any Record of id-${pm.environment.get(\"bookingId\")}`);\r",
+							"        break;\r",
+							"\r",
+							"    default:\r",
+							"        pm.test(`Geting Trouble To Fetch Data of id-${pm.environment.get(\"bookingId\")}`);\r",
+							"}\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{base_url}}/booking/{{bookingId}}",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"booking",
+						"{{bookingId}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create Access Token",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"//Get the response code:\r",
+							"let responseStatusCode = pm.response.code;\r",
+							"\r",
+							"//If the response code is 200, then do the certain task:\r",
+							"switch(responseStatusCode) {\r",
+							"    case 200:\r",
+							"        let responseData = pm.response.json();\r",
+							"        pm.environment.set(\"accessToken\", responseData.token);\r",
+							"        pm.test(\"Checking if the Access Token is creating.\");\r",
+							"        break;\r",
+							"\r",
+							"    default:\r",
+							"        pm.test(\"Doesn't created Access Token Successfully!\");\r",
+							"}\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"username\": \"admin\",\r\n    \"password\": \"password123\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{base_url}}/auth",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"auth"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Update Booking",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"//Predefined Data Set:\r",
+							"let updatedFirstName = pm.variables.replaceIn(\"{{$randomFirstName}}\");\r",
+							"let updatedLastName = pm.variables.replaceIn(\"{{$randomLastName}}\");\r",
+							"let updatedTotalPrice = pm.variables.replaceIn(\"{{$randomPrice}}\");\r",
+							"let updatedDepositPaid = pm.variables.replaceIn(\"{{$randomBoolean}}\");\r",
+							"let updatedAdditionalNeeds = pm.variables.replaceIn(\"{{$randomProductName}}\");\r",
+							"\r",
+							"//Date:\r",
+							"const date = require(\"moment\");\r",
+							"const today = date();\r",
+							"let updatedCheckIn = today.add(2, \"d\").format(\"YYYY-MM-DD\");\r",
+							"let updatedCheckOut = today.add(4, \"d\").format(\"YYYY-MM-DD\");\r",
+							"\r",
+							"//Store Variables in Environment:\r",
+							"pm.environment.set(\"updatedFirstName\", updatedFirstName);\r",
+							"pm.environment.set(\"updatedLastName\", updatedLastName);\r",
+							"pm.environment.set(\"updatedTotalPrice\", parseInt(updatedTotalPrice));\r",
+							"pm.environment.set(\"updatedDepositPaid\", updatedDepositPaid);\r",
+							"pm.environment.set(\"updatedCheckIn\", updatedCheckIn);\r",
+							"pm.environment.set(\"updatedCheckOut\", updatedCheckOut);\r",
+							"pm.environment.set(\"updatedAdditionalNeeds\", updatedAdditionalNeeds);\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"/**\r",
+							" * Title: Test Script For Data Update Validation;\r",
+							" */\r",
+							"\r",
+							"let responseStatusCode = pm.response.code;\r",
+							"\r",
+							"switch(responseStatusCode) {\r",
+							"    case 200:\r",
+							"        pm.test(`Veryfying that Booking Data is update of id's-${pm.environment.get(\"bookingId\")}!`);\r",
+							"        break;\r",
+							"\r",
+							"    case 403:\r",
+							"        pm.test(`Dosen't modified to Details of Booking ID- ${pm.environment.get(\"bookingId\")}`);\r",
+							"        break;\r",
+							"\r",
+							"    case 405:\r",
+							"        pm.test(`There's No Details of Booking ID- ${pm.environment.get(\"bookingId\")} - Create First`);\r",
+							"        break;\r",
+							"\r",
+							"    default:\r",
+							"        pm.test(\"Not Allowed to Update/Delete!\");\r",
+							"}\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Cookie",
+						"value": "token={{accessToken}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"firstname\": \"{{updatedFirstName}}\",\r\n    \"lastname\": \"{{updatedLastName}}\",\r\n    \"totalprice\": {{updatedTotalPrice}},\r\n    \"depositpaid\": {{updatedDepositPaid}},\r\n    \"bookingdates\": {\r\n        \"checkin\": \"{{updatedCheckIn}}\",\r\n        \"checkout\": \"{{updatedCheckOut}}\"\r\n    },\r\n    \"additionalneeds\": \"{{updatedAdditionalNeeds}}\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{base_url}}/booking/{{bookingId}}",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"booking",
+						"{{bookingId}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Booking After Updated",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"/**\r",
+							" * Title: Test Script For Updated Data Cross Validation;\r",
+							" */\r",
+							"\r",
+							"let responseStatusCode = pm.response.code;\r",
+							"\r",
+							"switch(responseStatusCode) {\r",
+							"    case 200:\r",
+							"        let responseData = pm.response.json();\r",
+							"        pm.test(`Checking if the Get Booking Data is updated of id's-${pm.environment.get(\"bookingId\")} after update!`);\r",
+							"\r",
+							"        pm.test(\"Checking if the Updated First Name as provided.\", function() {\r",
+							"            pm.expect(pm.environment.get(\"updatedFirstName\")).to.eql(responseData.firstname);\r",
+							"        });\r",
+							"\r",
+							"        pm.test(\"Checking if the Updated Lasst Name as provided.\", function() {\r",
+							"            pm.expect(pm.environment.get(\"updatedLastName\")).to.eql(responseData.lastname);\r",
+							"        });\r",
+							"\r",
+							"        pm.test(\"Checking if the Updated Total Price as provided.\", function() {\r",
+							"            pm.expect(pm.environment.get(\"updatedTotalPrice\")).to.eql(responseData.totalprice);\r",
+							"        });\r",
+							"\r",
+							"        pm.test(\"Checking if the Updated Deposit Paid as provided.\", function() {\r",
+							"            pm.expect(pm.environment.get(\"updatedDepositPaid\")).to.eql(responseData.depositpaid.toString());\r",
+							"        });\r",
+							"\r",
+							"        pm.test(\"Checking if the Updated Checkin Date as provided.\", function() {\r",
+							"            pm.expect(pm.environment.get(\"updatedCheckIn\")).to.eql(responseData.bookingdates.checkin);\r",
+							"        });\r",
+							"\r",
+							"        pm.test(\"Checking if the Updated Checkout Date as provided.\", function() {\r",
+							"            pm.expect(pm.environment.get(\"updatedCheckOut\")).to.eql(responseData.bookingdates.checkout);\r",
+							"        });\r",
+							"\r",
+							"        pm.test(\"Checking if the Updated AdditionalNeeds as provided.\", function() {\r",
+							"            pm.expect(pm.environment.get(\"updatedAdditionalNeeds\")).to.eql(responseData.additionalneeds);\r",
+							"        });\r",
+							"        break;\r",
+							"\r",
+							"    case 500:\r",
+							"        pm.test(`Server Error of id-${pm.environment.get(\"bookingId\")}'s record!`);\r",
+							"        break;\r",
+							"\r",
+							"    case 404:\r",
+							"        pm.test(`Not Found Any Record of id-${pm.environment.get(\"bookingId\")}`);\r",
+							"        break;\r",
+							"\r",
+							"    default:\r",
+							"        pm.test(`Geting Trouble To Fetch Data of id-${pm.environment.get(\"bookingId\")}`);\r",
+							"}\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{base_url}}/booking/{{bookingId}}",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"booking",
+						"{{bookingId}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Partial Update Booking",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"//Predefined Data Set:\r",
+							"let partialUpdatedFirstName = pm.variables.replaceIn(\"{{$randomFirstName}}\");\r",
+							"let partialUpdatedLastName = pm.variables.replaceIn(\"{{$randomLastName}}\");\r",
+							"let partialUpdatedTotalPrice = pm.variables.replaceIn(\"{{$randomPrice}}\");\r",
+							"let partialUpdatedDepositPaid = pm.variables.replaceIn(\"{{$randomBoolean}}\");\r",
+							"let partialUpdatedAdditionalNeeds = pm.variables.replaceIn(\"{{$randomProductName}}\");\r",
+							"\r",
+							"//Date:\r",
+							"const date = require(\"moment\");\r",
+							"const today = date();\r",
+							"let partialUpdatedCheckIn = today.add(2, \"d\").format(\"YYYY-MM-DD\");\r",
+							"let partialUpdatedCheckOut = today.add(4, \"d\").format(\"YYYY-MM-DD\");\r",
+							"\r",
+							"//Store Variables in Environment:\r",
+							"pm.environment.set(\"partialUpdatedTotalPrice\", parseInt(partialUpdatedTotalPrice));\r",
+							"pm.environment.set(\"partialUpdatedDepositPaid\", partialUpdatedDepositPaid);\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"//Get the response code:\r",
+							"let responseStatusCode = pm.response.code;\r",
+							"\r",
+							"//if response code is 200, then do certain task:\r",
+							"switch(responseStatusCode) {\r",
+							"    case 200:\r",
+							"        pm.test(`Veryfying that Booking Data is Partially update of id's-${pm.environment.get(\"bookingId\")}`);\r",
+							"        break;\r",
+							"\r",
+							"    case 403:\r",
+							"        pm.test(`Dosen't Partially Modified to Details of Booking ID- ${pm.environment.get(\"bookingId\")}`);\r",
+							"        break;\r",
+							"\r",
+							"    case 405:\r",
+							"        pm.test(`There's No Details of Booking ID- ${pm.environment.get(\"bookingId\")} - Create First`);\r",
+							"        break;\r",
+							"\r",
+							"    default:\r",
+							"        pm.test(\"Not Allowed to Update/Delete!\");\r",
+							"}\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "PATCH",
+				"header": [
+					{
+						"key": "Cookie",
+						"value": "token={{accessToken}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"totalprice\": {{partialUpdatedTotalPrice}},\r\n    \"depositpaid\": {{partialUpdatedDepositPaid}}\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{base_url}}/booking/{{bookingId}}",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"booking",
+						"{{bookingId}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Booking After Partial Updated",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"/**\r",
+							" * Title: Test Script For Partial Updated Data Cross Validation;\r",
+							" */\r",
+							"\r",
+							"let responseStatusCode = pm.response.code;\r",
+							"\r",
+							"switch(responseStatusCode) {\r",
+							"    case 200:\r",
+							"        let responseData = pm.response.json();\r",
+							"        pm.test(`Checking if the Booking id's-${pm.environment.get(\"bookingId\")} data is partially updated.`);\r",
+							"\r",
+							"        pm.test(\"Checking if the Total Price is Partially Updated as provided.\", function() {\r",
+							"            pm.expect(pm.environment.get(\"partialUpdatedTotalPrice\")).to.eql(responseData.totalprice);\r",
+							"        });\r",
+							"\r",
+							"        pm.test(\"Checking if the Deposit Paid is Partially Updated as provided.\", function() {\r",
+							"            pm.expect(pm.environment.get(\"partialUpdatedDepositPaid\")).to.eql(responseData.depositpaid.toString());\r",
+							"        });\r",
+							"        break;\r",
+							"\r",
+							"     case 500:\r",
+							"        pm.test(`Server Error of id-${pm.environment.get(\"bookingId\")}'s record!`);\r",
+							"        break;\r",
+							"\r",
+							"    case 404:\r",
+							"        pm.test(`Not Found Any Record of id-${pm.environment.get(\"bookingId\")}`);\r",
+							"        break;\r",
+							"\r",
+							"    default:\r",
+							"        pm.test(`Geting Trouble To Fetch Data of id-${pm.environment.get(\"bookingId\")}`);\r",
+							"}\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{base_url}}/booking/{{bookingId}}",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"booking",
+						"{{bookingId}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete Booking",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"//Get the response code:\r",
+							"let responseStatusCode = pm.response.code;\r",
+							"\r",
+							"switch(responseStatusCode) {\r",
+							"    case 200:\r",
+							"    case 201:\r",
+							"        pm.test(`Veryfying that Booking Data of id-${pm.environment.get(\"bookingId\")} is Deleted!`);\r",
+							"        break;\r",
+							"\r",
+							"    default:\r",
+							"        pm.test(\"Not allowed to Delete\");\r",
+							"}\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "Cookie",
+						"value": "token={{accessToken}}",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{base_url}}/booking/{{bookingId}}",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"booking",
+						"{{bookingId}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Booking After Deleted",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"//Response  Code:\r",
+							"let responseStatusCode = pm.response.code;\r",
+							"\r",
+							"//if response code is 200, then do the certain task:\r",
+							"switch(responseStatusCode) {\r",
+							"    case 500:\r",
+							"        pm.test(`Server Error of id-${pm.environment.get(\"bookingId\")}'s record!`);\r",
+							"        break;\r",
+							"\r",
+							"    case 404:\r",
+							"        pm.test(`Not Found Any Record of id-${pm.environment.get(\"bookingId\")}. Deleted Successfully!`);\r",
+							"        break;\r",
+							"\r",
+							"    default:\r",
+							"        pm.test(`Trouble to Fetch Data of id-${pm.environment.get(\"bookingId\")}`);\r",
+							"}\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{base_url}}/booking/{{bookingId}}",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"booking",
+						"{{bookingId}}"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
