@@ -477,3 +477,57 @@ git clone https://github.com/Muhammed-Nayeem/Automated-Testing-Of_Rest-Booking_A
         "additionalneeds": "Tasty Fresh Fish"
       }
     ```
+7. **Read After Partially Update A Booking :**
+
+    - `Request URL :` https://restful-booker.herokuapp.com/booking/bookingid
+    - `Request Method :` <span style="color: green; font-weight: bold;">GET</span>
+    - `Pre-request Script :` N/A
+    - `Request Body :` N/A
+    - **Tests :**
+    ```js
+      /**
+      * Title: Test Script For Partial Updated Data Cross Validation;
+      */
+
+      let responseStatusCode = pm.response.code;
+
+      switch(responseStatusCode) {
+        case 200:
+          let responseData = pm.response.json();
+          pm.test(`Checking if the Booking id's-${pm.environment.get("bookingId")} data is partially updated.`);
+
+          pm.test("Checking if the Total Price is Partially Updated as provided.", function() {
+              pm.expect(pm.environment.get("partialUpdatedTotalPrice")).to.eql(responseData.totalprice);
+          });
+
+          pm.test("Checking if the Deposit Paid is Partially Updated as provided.", function() {
+              pm.expect(pm.environment.get("partialUpdatedDepositPaid")).to.eql(responseData.depositpaid.toString());
+          });
+          break;
+
+        case 500:
+          pm.test(`Server Error of id-${pm.environment.get("bookingId")}'s record!`);
+          break;
+
+        case 404:
+          pm.test(`Not Found Any Record of id-${pm.environment.get("bookingId")}`);
+          break;
+
+        default:
+          pm.test(`Geting Trouble To Fetch Data of id-${pm.environment.get("bookingId")}`);
+      }
+    ```
+    - **Response Body :**
+    ```json
+      {
+        "firstname": "Margret",
+        "lastname": "Hoppe",
+        "totalprice": 978,
+        "depositpaid": false,
+        "bookingdates": {
+            "checkin": "2024-03-26",
+            "checkout": "2024-03-30"
+        },
+        "additionalneeds": "Ergonomic Frozen Bike"
+      }
+    ```
