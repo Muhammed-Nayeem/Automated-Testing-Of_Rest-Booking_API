@@ -591,3 +591,19 @@ git clone https://github.com/Muhammed-Nayeem/Automated-Testing-Of_Rest-Booking_A
     ```json
       Not Found
     ```
+### Run From CMD :
+---
+- Run Command For Console :
+```console
+  newman run BookingAPI_Coll.postman_collection.json -e BookingAPI_ENV.postman_environment.json
+```
+- Run Command For Report Generate :
+```console
+  newman run BookingAPI_Coll.postman_collection.json -e BookingAPI_ENV.postman_environment.json -r cli,htmlextra
+```
+### Newman Report Summary :
+---
+![Newman Summary Report](image.png)
+![Newman Summary Report](image-1.png)
+![Newman Summary Report](image-2.png)
+![Newman Summary Report](image-3.png)
